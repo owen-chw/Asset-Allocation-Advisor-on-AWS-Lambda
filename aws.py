@@ -51,6 +51,8 @@ class Control:
     def __init__(self):
         self.age = False
         self.experience = False
+        self.volatility = False
+        self.behavior = False
         self.tw = False
         self.commodity_category = False
         self.choose_tw = False
@@ -169,11 +171,15 @@ def lambda_handler(event, context):
 
                 reply = TemplateSendMessage(
                     alt_text="請問您是否有投資的經驗?",
-                    template=ConfirmTemplate(
+                    template=ButtonsTemplate(
+                        title="風險適合度評估",
                         text="請問您是否有投資的經驗?",
+                        thumbnail_image_url="https://doqvf81n9htmm.cloudfront.net/data/crop_article/104685/shutterstock_1411852109.jpg_1140x855.jpg",
                         actions=[
-                            MessageAction(label="我是新手", text="No"),
-                            MessageAction(label="我是老鳥", text="Yes")
+                            MessageAction(label="無經驗", text="無經驗"),
+                            MessageAction(label="1年以下", text="1年以下"),
+                            MessageAction(label="1~3年", text="1~3年"),
+                            MessageAction(label="3年以上", text="3年以上")
                         ]
                     )
                 )
@@ -182,11 +188,94 @@ def lambda_handler(event, context):
                 reply = TextSendMessage(text = "請輸入數字")
 
         elif (control.experience == True):
-            # receive experience and ask taiwan stock ratio
+            # receive experience and ask volatility
             control.experience = False
-            if (event.message.text == "No") and (portfolio.risky_asset_ratio >= 10):
-                #若為小白則建議高風險比例再減10%
-                portfolio.risky_asset_ratio-=10
+            if (event.message.text == "無經驗") and (portfolio.risky_asset_ratio >= 10):
+                portfolio.risky_asset_ratio -= 10
+            elif (event.message.text == "1年以下") and (portfolio.risky_asset_ratio >= 8):
+                portfolio.risky_asset_ratio -= 8
+            elif (event.message.text == "1~3年") and (portfolio.risky_asset_ratio >= 4):
+                portfolio.risky_asset_ratio -= 4
+            elif (event.message.text == "3年以上"):
+                portfolio.risky_asset_ratio -= 0
+
+            reply = TemplateSendMessage(
+                alt_text="請問您可以接受的價格波動幅度為?",
+                template=ButtonsTemplate(
+                    title="風險適合度評估",
+                    text="請問您可以接受的證卷價格波動幅度為?",
+                    thumbnail_image_url="http://ism.bwnet.com.tw/image/pool/sm/2017/02/e57f03410ffaaac54ecca6023a6c73ff.jpg",
+                    actions=[
+                        MessageAction(label="5%", text="5%"),
+                        MessageAction(label="10%", text="10%"),
+                        MessageAction(label="15%", text="15%"),
+                        MessageAction(label="20%以上", text="20%以上")
+                    ]
+                )
+            )
+            control.volatility = True
+            
+        elif (control.volatility == True):
+            # receive volatility and ask behavior
+            control.volatility = False
+            if (event.message.text == "5%") and (portfolio.risky_asset_ratio >= 10):
+                portfolio.risky_asset_ratio -= 10
+            elif (event.message.text == "10%") and (portfolio.risky_asset_ratio >= 8):
+                portfolio.risky_asset_ratio -= 8
+            elif (event.message.text == "15%") and (portfolio.risky_asset_ratio >= 4):
+                portfolio.risky_asset_ratio -= 4
+            elif (event.message.text == "20%以上"):
+                portfolio.risky_asset_ratio -= 0
+
+            reply = TemplateSendMessage(
+                alt_text="請問下列何者最接近您的投資行為與經驗?",
+                template=ButtonsTemplate(
+                    title="風險適合度評估",
+                    text="請問下列何者最接近您的投資行為與經驗?",
+                    thumbnail_image_url="https://storage.googleapis.com/www-cw-com-tw/article/202008/article-5f27d8bc89628.jpg",
+                    actions=[
+                        MessageAction(label="穩定收益保本", text="穩定收益保本"),
+                        MessageAction(label="追求快速獲利高風險高報酬", text="追求快速獲利高風險高報酬")
+                    ]
+                )
+            )
+            control.behavior = True
+
+        elif (control.behavior == True):
+            # receive behavior and ask loss
+            control.behavior = False
+            if (event.message.text == "穩定收益保本") and (portfolio.risky_asset_ratio >= 10):
+                portfolio.risky_asset_ratio -= 10
+            elif (event.message.text == "追求快速獲利高風險高報酬"):
+                portfolio.risky_asset_ratio -= 0
+
+            reply = TemplateSendMessage(
+                alt_text="若您投資的部位已經損失15%, 這時您會?",
+                template=ButtonsTemplate(
+                    title="風險適合度評估",
+                    text="若您投資的部位已經損失15%, 這時您會?",
+                    thumbnail_image_url="https://cimg.cnyes.cool/prod/news/4866274/l/6f735855050b0a5a8f06fa7b91bc25e4.jpg",
+                    actions=[
+                        MessageAction(label="全部停損賣出", text="全部停損賣出"),
+                        MessageAction(label="部分賣出", text="部分賣出"),
+                        MessageAction(label="繼續觀察後市", text="繼續觀察後市"),
+                        MessageAction(label="逢低加碼", text="逢低加碼")
+                    ]
+                )
+            )
+            control.loss = True
+
+        elif (control.loss == True):
+            # receive loss and ask taiwan stock ratio
+            control.loss = False
+            if (event.message.text == "全部停損賣出") and (portfolio.risky_asset_ratio >= 10):
+                portfolio.risky_asset_ratio -= 10
+            elif (event.message.text == "部分賣出") and (portfolio.risky_asset_ratio >= 8):
+                portfolio.risky_asset_ratio -= 8
+            elif (event.message.text == "繼續觀察後市") and (portfolio.risky_asset_ratio >= 4):
+                portfolio.risky_asset_ratio -= 4
+            elif (event.message.text == "逢低加碼"):
+                portfolio.risky_asset_ratio -= 0
 
             reply_word = "建議您的高風險資產占比為:\n" + str(portfolio.risky_asset_ratio) + "%\n"
             reply_word += "為了降低單一地區的系統性風險，分散投資於全球是很重要的工作。"
