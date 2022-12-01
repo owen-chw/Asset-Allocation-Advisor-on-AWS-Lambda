@@ -488,6 +488,7 @@ def lambda_handler(event, context):
 
         # get request body as text
         body = event['body']
+        print(body)
         
         # handle webhook body
         handler.handle(body, signature)
