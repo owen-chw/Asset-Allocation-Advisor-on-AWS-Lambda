@@ -221,7 +221,7 @@ def lambda_handler(event, context):
                 alt_text="請問您可以接受的價格波動幅度為?",
                 template=ButtonsTemplate(
                     title="風險適合度評估",
-                    text="請問您可以接受的證卷價格波動幅度為?",
+                    text="請問您可以接受的證劵價格波動幅度為?",
                     thumbnail_image_url="https://doqvf81n9htmm.cloudfront.net/data/crop_article/61261/shutterstock_252511228.jpg_1140x855.jpg",
                     actions=[
                         MessageAction(label="5%", text="5%"),
@@ -336,7 +336,7 @@ def lambda_handler(event, context):
                 )
 
             elif (event.message.text == "債劵ETF"):
-                #show 債卷ETF
+                #show 債劵ETF
                 control.commodity_category = False 
                 control.choose_bond = True
                 reply = TemplateSendMessage(
@@ -529,7 +529,7 @@ def lambda_handler(event, context):
                 reply_word += "\n 全球市場型ETF:\n"
                 for i in portfolio.global_asset:
                     reply_word += f"  {i.name} 占比: {i.weight:.2%}\n "
-                reply_word += "\n 債卷ETF:\n"
+                reply_word += "\n 債劵ETF:\n"
                 for i in portfolio.bond_asset:
                     reply_word += f"  {i.name} 占比: {i.weight:.2%}\n "
                 reply_word += f"\n另外，建議您在接下來的{portfolio.n}年，每年皆定期投入\"實質\"{portfolio.PMT:.1f}元到上述投資組合，以期達成退休目標\n"
@@ -559,7 +559,7 @@ def lambda_handler(event, context):
                     actions=[
                          MessageAction(label="台灣市場型ETF", text="台灣市場型ETF"),
                          MessageAction(label="國際市場型ETF", text="國際市場型ETF"),
-                         MessageAction(label="債卷ETF", text="債卷ETF"),
+                         MessageAction(label="債劵ETF", text="債劵ETF"),
                          MessageAction(label="已經選擇完畢，前往下一步", text="next")
                     ]
                 )
