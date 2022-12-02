@@ -157,8 +157,8 @@ def lambda_handler(event, context):
             portfolio.__init__()
             control.__init__()
 
-            reply_word = "Hi 我是花花，接下來我將利用資產配置理論，帶您以被動投資的方式，幫您以退休為目標，規劃自己的長期投資組合，跟隨全球市場一起長期成長。\n"
-            reply_word += "go go go \n請輸入您的年齡"
+            reply_word = "Hi 我是花花，接下來我將利用資產配置理論及被動投資法，帶您邁開投資的第1步，以退休為目標，規劃長期投資組合，跟隨全球市場一起長期成長。\n"
+            reply_word += "Go Go Go \n\n請輸入您的年齡"
             reply = TextSendMessage(reply_word)
             control.age = True 
 
@@ -175,7 +175,7 @@ def lambda_handler(event, context):
             reply_word += "您選擇的全球市場型ETF有: \n"
             for i in portfolio.global_asset:
                 reply_word += i.name + " r= " + str(i.return_rate) +"\nw= " + str(i.weight) + "\n"
-            reply_word += "您選擇的債卷ETF有: \n"
+            reply_word += "您選擇的債劵ETF有: \n"
             for i in portfolio.bond_asset:
                 reply_word += i.name + " r= " + str(i.return_rate) +"\nw= " + str(i.weight) + "\n"
             reply = TextSendMessage(reply_word)
@@ -222,7 +222,7 @@ def lambda_handler(event, context):
                 template=ButtonsTemplate(
                     title="風險適合度評估",
                     text="請問您可以接受的證卷價格波動幅度為?",
-                    thumbnail_image_url="https://www.franklin.com.tw/About/images/kv.jpg",
+                    thumbnail_image_url="https://doqvf81n9htmm.cloudfront.net/data/crop_article/61261/shutterstock_252511228.jpg_1140x855.jpg",
                     actions=[
                         MessageAction(label="5%", text="5%"),
                         MessageAction(label="10%", text="10%"),
@@ -335,12 +335,12 @@ def lambda_handler(event, context):
                     template=CarouselTemplate(columns=global_template_column)
                 )
 
-            elif (event.message.text == "債卷ETF"):
+            elif (event.message.text == "債劵ETF"):
                 #show 債卷ETF
                 control.commodity_category = False 
                 control.choose_bond = True
                 reply = TemplateSendMessage(
-                    alt_text="請選擇想要的債卷ETF",
+                    alt_text="請選擇想要的債劵ETF",
                     template=CarouselTemplate(columns=bond_template_column)
                 )
 
@@ -360,7 +360,7 @@ def lambda_handler(event, context):
 
                 control.basic_spending = True
                 reply_word = "恭喜您已經挑選完示範投資組合，接下來將為您計算每月需投入多少資金到此投資組合，才有可能達成退休目標\n\n"
-                reply_word += "請輸入您目前每個月的最低生活費(含:房租、水電費、瓦斯費、基本伙食費、電信費等)"
+                reply_word += "請輸入您目前每個月的最低生活費(含:房租、水電瓦斯費、交通費、基本伙食費、電信費等, 單位: 元)"
                 reply = TextSendMessage(reply_word)
 
 
@@ -478,7 +478,7 @@ def lambda_handler(event, context):
                 portfolio.emergency_fund = int(event.message.text) * 12
                 control.basic_spending = False
                 control.saving = True
-                reply = TextSendMessage(text = "請輸入您目前的存款總額")
+                reply = TextSendMessage(text = "請輸入您目前的存款總額(單位: 元)")
             else:
                 reply = TextSendMessage(text = "請輸入正整數")
 
@@ -491,7 +491,7 @@ def lambda_handler(event, context):
                 reply = TextSendMessage(text = "請問您預計在幾歲時退休?")
 
             else:
-                reply = TextSendMessage(text = "請輸入正整數")
+                reply = TextSendMessage(text = "請輸入正整數且須大於您目前的年齡")
 
         elif control.retire_age == True:
             #receiving retire age, ask retire mounthly spending 
@@ -499,10 +499,10 @@ def lambda_handler(event, context):
                 portfolio.n = int(event.message.text) - portfolio.age
                 control.retire_age = False
                 control.retire_spending = True
-                reply = TextSendMessage(text = "請問您預計退休時的每月實質開銷為多少?\n不需考慮通貨膨脹，以目前的購買力計算即可")
+                reply = TextSendMessage(text = "請問您預計退休時的每月實質開銷為多少(單位: 元)?\n不需考慮通貨膨脹，以目前的購買力計算即可")
 
             else:
-                reply = TextSendMessage(text = "請輸入正整數且須大於您目前的年齡")
+                reply = TextSendMessage(text = "請輸入正整數")
 
         elif control.retire_spending == True:
             # receiving retire monthly spending, calculate PMT 
@@ -517,6 +517,8 @@ def lambda_handler(event, context):
                 PV = portfolio.PV
                 FV = portfolio.FV
                 portfolio.PMT = k/(1-(1+k)**(-n)) * (-PV - FV/((1+k)**n))
+                if portfolio.PMT<0:
+                    portfolio.PMT *= -1
 
                 reply_word = "大功告成!!\n"
                 reply_word += "建議您將存款中的 $"+str(portfolio.emergency_fund)+"元存入定存做為緊急預備金\n\n"
@@ -551,7 +553,7 @@ def lambda_handler(event, context):
             reply = TemplateSendMessage(
                 alt_text="選擇參考商品類型",
                 template=ButtonsTemplate(
-                    title="請選擇商品類別",
+                    title="已儲存您輸入的結果，請繼續選擇商品類別",
                     text="以下將提供各類型參考商品，做為資產配置的試算範例",
                     thumbnail_image_url="https://storage.googleapis.com/www-cw-com-tw/article/202202/article-6204731485570.jpg",
                     actions=[
