@@ -157,10 +157,28 @@ def lambda_handler(event, context):
             portfolio.__init__()
             control.__init__()
 
-            reply_word = "Hi 我是花花，接下來我將利用資產配置理論及CAPM，帶您以被動投資的方式，幫您以退休為目標，規劃自己的長期投資組合，跟隨全球市場一起長期成長。\n"
-            reply_word += "go go go "+str(portfolio.access_risky_asset_ratio())+"\n請輸入您的年齡"
+            reply_word = "Hi 我是花花，接下來我將利用資產配置理論，帶您以被動投資的方式，幫您以退休為目標，規劃自己的長期投資組合，跟隨全球市場一起長期成長。\n"
+            reply_word += "go go go \n請輸入您的年齡"
             reply = TextSendMessage(reply_word)
             control.age = True 
+
+        elif event.message.text == "show":
+            reply_word = "建議您的高風險資產占比為:\n"+str(portfolio.access_risky_asset_ratio())+"\n"
+            reply_word += "在高風險資產中，台股的占比為:\n"+str(portfolio.tw_ratio)+"%\n"
+            reply_word += "緊急備用金: $"+str(portfolio.emergency_fund)+"元\n"
+            reply_word += "距離退休還有"+str(portfolio.n)+"年\n"
+            reply_word += "PMT = "+str(portfolio.PMT)+"元\n"
+            reply_word += "portfolio return rate= "+str(portfolio.portfolio_return_rate)+"\n"
+            reply_word += "您選擇的台灣市場型ETF有: \n"
+            for i in portfolio.tw_asset:
+                reply_word += i.name + " r= " + str(i.return_rate) +"\nw= " + str(i.weight) + "\n"
+            reply_word += "您選擇的全球市場型ETF有: \n"
+            for i in portfolio.global_asset:
+                reply_word += i.name + " r= " + str(i.return_rate) +"\nw= " + str(i.weight) + "\n"
+            reply_word += "您選擇的債卷ETF有: \n"
+            for i in portfolio.bond_asset:
+                reply_word += i.name + " r= " + str(i.return_rate) +"\nw= " + str(i.weight) + "\n"
+            reply = TextSendMessage(reply_word)
 
         elif (control.age == True ):
             # receive age, adjust risky rate, and ask experience
@@ -204,7 +222,7 @@ def lambda_handler(event, context):
                 template=ButtonsTemplate(
                     title="風險適合度評估",
                     text="請問您可以接受的證卷價格波動幅度為?",
-                    thumbnail_image_url="http://ism.bwnet.com.tw/image/pool/sm/2017/02/e57f03410ffaaac54ecca6023a6c73ff.jpg",
+                    thumbnail_image_url="https://www.franklin.com.tw/About/images/kv.jpg",
                     actions=[
                         MessageAction(label="5%", text="5%"),
                         MessageAction(label="10%", text="10%"),
@@ -525,26 +543,6 @@ def lambda_handler(event, context):
             else:
                 reply = TextSendMessage(text = "請輸入正整數")
 
-
-
-        elif event.message.text == "show":
-            reply_word = "建議您的高風險資產占比為:\n"+str(portfolio.access_risky_asset_ratio())+"\n"
-            reply_word += "在高風險資產中，台股的占比為:\n"+str(portfolio.tw_ratio)+"%\n"
-            reply_word += "緊急備用金: $"+str(portfolio.emergency_fund)+"元\n"
-            reply_word += "距離退休還有"+str(portfolio.n)+"年\n"
-            reply_word += "PMT = "+str(portfolio.PMT)+"元\n"
-            reply_word += "portfolio return rate= "+str(portfolio.portfolio_return_rate)+"\n"
-            reply_word += "您選擇的台灣市場型ETF有: \n"
-            for i in portfolio.tw_asset:
-                reply_word += i.name + " r= " + str(i.return_rate) +"\nw= " + str(i.weight) + "\n"
-            reply_word += "您選擇的全球市場型ETF有: \n"
-            for i in portfolio.global_asset:
-                reply_word += i.name + " r= " + str(i.return_rate) +"\nw= " + str(i.weight) + "\n"
-            reply_word += "您選擇的債卷ETF有: \n"
-            for i in portfolio.bond_asset:
-                reply_word += i.name + " r= " + str(i.return_rate) +"\nw= " + str(i.weight) + "\n"
-            reply = TextSendMessage(reply_word)
-    
         else:
             reply = TextSendMessage(text= event.message.text)
 
