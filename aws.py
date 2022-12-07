@@ -180,6 +180,11 @@ def lambda_handler(event, context):
                 reply_word += i.name + " r= " + str(i.return_rate) +"\nw= " + str(i.weight) + "\n"
             reply = TextSendMessage(reply_word)
 
+        elif event.message.text == "more":
+            reply_word = "定期定額是什麼？\nhttps://rich01.com/dollar-cost-averaging/\n\n"
+            reply_word += "再平衡\nhttps://rich01.com/what-asset-rebalancing/\n\n"
+            reply = TextSendMessage(reply_word)
+
         elif (control.age == True ):
             # receive age, adjust risky rate, and ask experience
             if event.message.text.isdigit():
