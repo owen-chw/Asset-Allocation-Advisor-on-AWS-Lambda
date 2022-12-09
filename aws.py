@@ -180,9 +180,41 @@ def lambda_handler(event, context):
                 reply_word += i.name + " r= " + str(i.return_rate) +"\nw= " + str(i.weight) + "\n"
             reply = TextSendMessage(reply_word)
 
+        elif event.message.text == "FAQ":
+            # trigered by 按下功能表上"名詞解釋"按鈕後，display below
+            reply_word = "喵 有問題嗎?讓花花來幫你解答:\n\n"
+
+            reply_word += "股票是什麼？\n"
+            reply_word += "持有股票，就能讓你成為股東，分享公司成長所結出的果實\nhttps://reurl.cc/MXML3p\n\n"
+
+            reply_word += "緊急預備金是什麼?\n"
+            reply_word += "緊急預備金就是一筆用來應付突發意外的資金，適合存在台幣定存中\nhttps://reurl.cc/VRmQqb\n\n"
+
+            reply_word += "什麼是大盤加權指數？\n"
+            reply_word += "大盤指數用來反映整個市場的漲跌情況\nhttps://reurl.cc/OERLg9\n\n"
+
+            reply_word += "債券ETF 是什麼?\n"
+            reply_word += "https://reurl.cc/eWV7lm\n\n"
+
+            reply_word += "退休需要多少錢?\n"
+            reply_word += "https://reurl.cc/91bL8j\n\n"
+
+            reply = TextSendMessage(reply_word)
+
         elif event.message.text == "more":
-            reply_word = "定期定額是什麼？\nhttps://rich01.com/dollar-cost-averaging/\n\n"
-            reply_word += "再平衡\nhttps://rich01.com/what-asset-rebalancing/\n\n"
+            # trigered by 按下功能表上"實踐規劃"按鈕後，display below
+            reply_word = "做完配置規劃後，不知道要怎麼實行嗎?\n"
+            reply_word += "花花幫你準備了超強懶人包，快來看看喵!\n\n"
+
+            reply_word += "平均成本的法寶:定期定額\nhttps://reurl.cc/58Ry8v\n\n"
+            reply_word += "再平衡是啥?能吃嗎\nhttps://reurl.cc/4XN7XD\n\n"
+            reply_word += "配息高的一定好? 高股息的迷思\nhttps://reurl.cc/Z1l9O6\n\n"
+            reply_word += "台灣ETF要怎麼買?\nhttps://reurl.cc/91b3An\n\n"
+            reply_word += "國際型ETF和債劵ETF怎麼買?複委託vs.海外劵商\nhttps://reurl.cc/LXQlr4\n\n"
+            reply_word += "國泰證劵複委託\nhttps://reurl.cc/aaMdQQ\n\n"
+            reply_word += "富邦證劵複委託\nhttps://reurl.cc/DXblNQ\n\n"
+            reply_word += "投資小白必看!花花推薦的投資入門指南: 漫步華爾街的10條投資金律\nhttps://reurl.cc/Wq8Wp5d\n\n"
+            reply_word += "如何估算股票的長期報酬率? 讓高登公式來幫你\nhttps://reurl.cc/jRmYbD\n\n"
             reply = TextSendMessage(reply_word)
 
         elif (control.age == True ):
@@ -526,8 +558,13 @@ def lambda_handler(event, context):
                     portfolio.PMT *= -1
 
                 reply_word = "大功告成!!\n"
-                reply_word += "建議您將存款中的 $"+str(portfolio.emergency_fund)+"元存入定存做為緊急預備金\n\n"
-                reply_word += "其餘存款您可以投入以下投資組合:\n"
+                if portfolio.PV >= 0:
+                    reply_word += "建議您將存款中的 $"+str(portfolio.emergency_fund)+"元存入定存做為緊急預備金\n\n"
+                    reply_word += "其餘存款 $"+str(portfolio.PV)+"您可以投入以下投資組合:\n"
+                else:
+                    reply_word += "建議您先努力存到$"+str(portfolio.emergency_fund)+"元做為緊急預備金，若您有信貸、卡債等高利息債務，也建議您先盡快清償\n\n"
+                    reply_word += "之後再將收入定期定額投入以下投資組合:\n"
+
                 reply_word += " 台灣市場型ETF:\n"
                 for i in portfolio.tw_asset:
                     reply_word += f"  {i.name} 占比: {i.weight:.2%}\n "
@@ -537,12 +574,12 @@ def lambda_handler(event, context):
                 reply_word += "\n 債劵ETF:\n"
                 for i in portfolio.bond_asset:
                     reply_word += f"  {i.name} 占比: {i.weight:.2%}\n "
-                reply_word += f"\n另外，建議您在接下來的{portfolio.n}年，每年皆定期投入\"實質\"{portfolio.PMT:.1f}元到上述投資組合，以期達成退休目標\n"
+                reply_word += f"\n另外，建議您在接下來的{portfolio.n}年，每年皆定期定額投入\"實質\"{portfolio.PMT:.1f}元到上述投資組合，以期達成退休目標\n"
                 reply_word += f"(ex: 若今年的通膨率為2%，則明年應投入{portfolio.PMT*1.02:.1f}元至投資組合)\n\n"
 
                 reply_word += "<<免責聲明>>\n"
                 reply_word += "本軟體僅做為學術研究使用，不可用於實際投資建議，更不得作為任何交易之依據。投資一定有風險，過往業績並不代表將來表現，投資人應運用個人獨立思考能力，或諮詢其財務、稅務、投資等顧問，自行作出投資決定，本軟體在任何情況下均不會就任何直接、間接或其他損失承擔任何責任。"
-                reply_word += "本軟體提供之資訊及被連結之他方網站或系統所提供之任何產品、服務或資訊僅供參考之用，本軟體不就此資料作出任何保證，包括但不限於來源、正確性、及時性、完整性或任何其他用途之適合性等各方面之保證。所有出現的商品僅為教學示範目的，皆不構成要約、招攬、邀請、誘使、任何不論種類及形式之申述或訂立任何建議及推薦。"
+                reply_word += "本軟體提供之資訊及被連結之他方網站或系統所提供之任何產品、服務或資訊僅供參考之用，本軟體不就此資料作出任何保證，包括但不限於來源、正確性、即時性、完整性或任何其他用途之適合性等各方面之保證。所有出現的商品僅為教學示範目的，皆不構成要約、招攬、邀請、誘使、任何不論種類及形式之申述或訂立任何建議及推薦。"
                 reply_word += "所有觀點僅為個人對市場之看法，並非任何投資勸誘或建議。雖本軟體為了保守起見，採用高登公式來評估商品未來的長期報酬率，但仍不保證按照上述示範建議便可達成目標，所有建議僅為學術範例，而非任何投資建議。"
 
                 reply = TextSendMessage(text=reply_word)
@@ -553,7 +590,7 @@ def lambda_handler(event, context):
         else:
             reply = TextSendMessage(text= event.message.text)
 
-        if (control.commodity_category == True):
+        if ((control.commodity_category == True) and (event.message.text != "FAQ")):
             # ask to choose commodity_category
             reply = TemplateSendMessage(
                 alt_text="選擇參考商品類型",
