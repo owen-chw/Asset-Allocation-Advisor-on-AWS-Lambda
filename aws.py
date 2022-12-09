@@ -153,9 +153,7 @@ def lambda_handler(event, context):
         print("**********in model********")
 
         if event.message.text == "start":
-            # initialize and ask age
-            portfolio.__init__()
-            control.__init__()
+            # introduction
 
             reply_word = "Hi 我是花花，接下來我將利用資產配置理論及被動投資法，帶您邁開投資的第1步，以退休為目標，規劃長期投資組合，跟隨全球市場一起長期成長。\n"
             reply = TemplateSendMessage(
@@ -172,7 +170,32 @@ def lambda_handler(event, context):
             )
         
         elif event.message.text == "進入新手村":
-            reply_word += "Go Go Go \n\n請輸入您的年齡"
+            reply = TemplateSendMessage(
+                alt_text="被動投資是什麼",
+                template=ButtonsTemplate(
+                    title="蛤，被動投資是啥?",
+                    text="被動投資就是買進並長期持有市場上所有投資標的，以賺取整體市場長期經濟成長",
+                    actions=[
+                        URIAction(
+                            label="點我看更多被動投資的介紹",
+                            uri="https://rich01.com/what-passive-invest/"
+                        ),
+                        MessageAction(
+                            label="如何買進市場上所有投資標的",
+                            text="如何買進市場上所有投資標的"
+                        )
+                    ]
+                )
+            )
+
+        elif event.message.text == "如何買進市場上所有投資標的"
+
+
+            # initialize and ask age
+            portfolio.__init__()
+            control.__init__()
+
+            reply_word = "Go Go Go \n\n請輸入您的年齡"
             reply = TextSendMessage(reply_word)
             control.age = True 
 
