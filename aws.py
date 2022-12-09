@@ -160,7 +160,7 @@ def lambda_handler(event, context):
             reply_word = "Hi 我是花花，接下來我將利用資產配置理論及被動投資法，帶您邁開投資的第1步，以退休為目標，規劃長期投資組合，跟隨全球市場一起長期成長。\n"
             reply = TemplateSendMessage(
                 alt_text="進入新手村",
-                template=ConfirmTemplate(
+                template=ButtonsTemplate(
                     text=reply_word,
                     actions=[
                         MessageAction(
