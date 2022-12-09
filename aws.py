@@ -158,6 +158,20 @@ def lambda_handler(event, context):
             control.__init__()
 
             reply_word = "Hi 我是花花，接下來我將利用資產配置理論及被動投資法，帶您邁開投資的第1步，以退休為目標，規劃長期投資組合，跟隨全球市場一起長期成長。\n"
+            reply = TemplateSendMessage(
+                alt_text="進入新手村",
+                template=ConfirmTemplate(
+                    text=reply_word,
+                    actions=[
+                        MessageAction(
+                            label="進入新手村",
+                            text="進入新手村"
+                        )
+                    ]
+                )
+            )
+        
+        elif event.message.text == "進入新手村":
             reply_word += "Go Go Go \n\n請輸入您的年齡"
             reply = TextSendMessage(reply_word)
             control.age = True 
@@ -213,7 +227,7 @@ def lambda_handler(event, context):
             reply_word += "國際型ETF和債劵ETF怎麼買?複委託vs.海外劵商\nhttps://reurl.cc/LXQlr4\n\n"
             reply_word += "國泰證劵複委託\nhttps://reurl.cc/aaMdQQ\n\n"
             reply_word += "富邦證劵複委託\nhttps://reurl.cc/DXblNQ\n\n"
-            reply_word += "投資小白必看!花花推薦的投資入門指南: 漫步華爾街的10條投資金律\nhttps://reurl.cc/Wq8Wp5d\n\n"
+            reply_word += "投資小白必看!花花推薦的投資入門指南: 漫步華爾街的10條投資金律\nhttps://reurl.cc/gQnjW7\n\n"
             reply_word += "如何估算股票的長期報酬率? 讓高登公式來幫你\nhttps://reurl.cc/jRmYbD\n\n"
             reply = TextSendMessage(reply_word)
 
@@ -576,6 +590,9 @@ def lambda_handler(event, context):
                     reply_word += f"  {i.name} 占比: {i.weight:.2%}\n "
                 reply_word += f"\n另外，建議您在接下來的{portfolio.n}年，每年皆定期定額投入\"實質\"{portfolio.PMT:.1f}元到上述投資組合，以期達成退休目標\n"
                 reply_word += f"(ex: 若今年的通膨率為2%，則明年應投入{portfolio.PMT*1.02:.1f}元至投資組合)\n\n"
+
+                reply_word += "做完規劃後不知道如何開始執行嗎?\n"
+                reply_word += "別擔心，花花幫你準備新手大禮包，可以解決您的疑問，快點擊功能表的\"實踐規劃\"領取大禮包\n\n!"
 
                 reply_word += "<<免責聲明>>\n"
                 reply_word += "本軟體僅做為學術研究使用，不可用於實際投資建議，更不得作為任何交易之依據。投資一定有風險，過往業績並不代表將來表現，投資人應運用個人獨立思考能力，或諮詢其財務、稅務、投資等顧問，自行作出投資決定，本軟體在任何情況下均不會就任何直接、間接或其他損失承擔任何責任。"
