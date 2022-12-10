@@ -258,21 +258,21 @@ def lambda_handler(event, context):
 
         elif event.message.text == "FAQ":
             # trigered by 按下功能表上"名詞解釋"按鈕後，display below
-            reply_word = "喵 有問題嗎?讓花花來幫你解答:\n\n"
+            reply_word = "\U0001F638喵 有問題嗎?讓花花來幫你解答:\n\n"
 
-            reply_word += "股票是什麼？\n"
+            reply_word += "\U0001F449股票是什麼?\n"
             reply_word += "持有股票，就能讓你成為股東，分享公司成長所結出的果實\nhttps://reurl.cc/MXML3p\n\n"
 
-            reply_word += "緊急預備金是什麼?\n"
+            reply_word += "\U0001F449緊急預備金是什麼?\n"
             reply_word += "緊急預備金就是一筆用來應付突發意外的資金，適合存在台幣定存中\nhttps://reurl.cc/VRmQqb\n\n"
 
-            reply_word += "什麼是大盤加權指數？\n"
+            reply_word += "\U0001F449什麼是大盤加權指數？\n"
             reply_word += "大盤指數用來反映整個市場的漲跌情況\nhttps://reurl.cc/OERLg9\n\n"
 
-            reply_word += "債券ETF 是什麼?\n"
+            reply_word += "\U0001F449債券ETF 是什麼?\n"
             reply_word += "https://reurl.cc/eWV7lm\n\n"
 
-            reply_word += "退休需要多少錢?\n"
+            reply_word += "\U0001F449退休需要多少錢?\n"
             reply_word += "https://reurl.cc/91bL8j\n\n"
 
             reply = TextSendMessage(reply_word)
@@ -280,18 +280,18 @@ def lambda_handler(event, context):
         elif event.message.text == "more":
             # trigered by 按下功能表上"實踐規劃"按鈕後，display below
             reply_word = "做完配置規劃後，不知道要怎麼實行嗎?\n"
-            reply_word += "花花幫你準備了超強懶人包，快來看看喵!\n\n"
+            reply_word += "花花幫你準備了超強懶人包，快來看看喵!\U0001F638\n\n"
 
-            reply_word += "平均成本的法寶:定期定額\nhttps://reurl.cc/58Ry8v\n\n"
-            reply_word += "再平衡是啥?能吃嗎\nhttps://reurl.cc/4XN7XD\n\n"
-            reply_word += "配息高的一定好? 高股息的迷思\nhttps://reurl.cc/Z1l9O6\n\n"
-            reply_word += "台灣ETF要怎麼買?\nhttps://reurl.cc/91b3An\n\n"
-            reply_word += "國際型ETF和債劵ETF怎麼買?複委託vs.海外劵商\nhttps://reurl.cc/LXQlr4\n\n"
-            reply_word += "國泰證劵複委託\nhttps://reurl.cc/aaMdQQ\n\n"
-            reply_word += "富邦證劵複委託\nhttps://reurl.cc/DXblNQ\n\n"
-            reply_word += "投資小白必看!花花推薦的投資入門指南: 漫步華爾街的10條投資金律\nhttps://reurl.cc/gQnjW7\n\n"
-            reply_word += "如何估算股票的長期報酬率? 讓高登公式來幫你\nhttps://reurl.cc/jRmYbD\n\n"
-            reply_word += "想知道花花的秘密嗎? 歡迎來本專案的github賞星星\nhttps://reurl.cc/91b8LV\n\n"
+            reply_word += "\U0001F449平均成本的法寶:定期定額\nhttps://reurl.cc/58Ry8v\n\n"
+            reply_word += "\U0001F449再平衡是啥?能吃嗎\nhttps://reurl.cc/4XN7XD\n\n"
+            reply_word += "\U0001F449配息高的一定好? 高股息的迷思\nhttps://reurl.cc/Z1l9O6\n\n"
+            reply_word += "\U0001F449台灣ETF要怎麼買?\nhttps://reurl.cc/91b3An\n\n"
+            reply_word += "\U0001F449國際型ETF和債劵ETF怎麼買?複委託vs.海外劵商\nhttps://reurl.cc/LXQlr4\n\n"
+            reply_word += "\U0001F449國泰證劵複委託\nhttps://reurl.cc/aaMdQQ\n\n"
+            reply_word += "\U0001F449富邦證劵複委託\nhttps://reurl.cc/DXblNQ\n\n"
+            reply_word += "\U0001F449投資小白必看!花花推薦的投資入門指南: 漫步華爾街的10條投資金律\nhttps://reurl.cc/gQnjW7\n\n"
+            reply_word += "\U0001F449如何估算股票的長期報酬率? 讓高登公式來幫你\nhttps://reurl.cc/jRmYbD\n\n"
+            reply_word += "\U0001F449想知道花花\U0001F638的秘密嗎? 歡迎來本專案的github賞星星\U00002B50\nhttps://reurl.cc/91b8LV\n\n"
             reply = TextSendMessage(reply_word)
 
         elif (control.age == True ):
@@ -635,8 +635,7 @@ def lambda_handler(event, context):
                 PV = portfolio.PV
                 FV = portfolio.FV
                 portfolio.PMT = k/(1-(1+k)**(-n)) * (-PV - FV/((1+k)**n))
-                if portfolio.PMT<0:
-                    portfolio.PMT *= -1
+                portfolio.PMT *= -1
 
                 reply_word = "大功告成!!\n"
                 if portfolio.PV != 0:
