@@ -174,7 +174,7 @@ def lambda_handler(event, context):
                 alt_text="被動投資是什麼",
                 template=ButtonsTemplate(
                     title="蛤，被動投資是啥?",
-                    text="被動投資就是買進並長期持有市場上所有投資標的，以賺取整體市場長期經濟成長，並降低個股風險",
+                    text="被動投資就是買進並長期持有市場上所有投資標的，以賺取整體市場長期經濟成長，並降低個股風險。",
                     actions=[
                         URIAction(
                             label="點我看更多被動投資的介紹",
@@ -213,7 +213,7 @@ def lambda_handler(event, context):
             reply = TemplateSendMessage(
                 alt_text="資產配置是什麼",
                 template=ButtonsTemplate(
-                    text="資產配置就是透過持有不同的資產，來降低投資組合的波動!如果只持有股票，在經濟衰退時，可能有高達40%的跌幅，使投資人忍不住在最差的時候賣出股票;若持有股票+債劵，因為兩者非完全正相關，故能降低投組的波動，避免投資人的不理性行為",
+                    text="資產配置就是透過持有不同的資產，來降低投資組合的波動!如果只持有股票，在經濟衰退時，可能有高達40%的跌幅，使投資人忍不住在最差的時候賣出股票; 若持有股票+債劵，因為兩者非完全正相關，故能降低投資組合的波動，避免投資人的不理性行為。",
                     actions=[
                         URIAction(
                             label="點我看更多資產配置的介紹",
@@ -605,7 +605,7 @@ def lambda_handler(event, context):
                 reply = TextSendMessage(text = "請問您預計在幾歲時退休?")
 
             else:
-                reply = TextSendMessage(text = "請輸入正整數且須大於您目前的年齡")
+                reply = TextSendMessage(text = "請輸入正整數，若您有信貸、卡債等高利息債務，建議您先盡快清償，再來思考如何投資")
 
         elif control.retire_age == True:
             #receiving retire age, ask retire mounthly spending 
@@ -616,7 +616,7 @@ def lambda_handler(event, context):
                 reply = TextSendMessage(text = "請問您預計退休時的每月實質開銷為多少(單位: 元)?\n不需考慮通貨膨脹，以目前的購買力計算即可")
 
             else:
-                reply = TextSendMessage(text = "請輸入正整數")
+                reply = TextSendMessage(text = "請輸入正整數且須大於您目前的年齡")
 
         elif control.retire_spending == True:
             # receiving retire monthly spending, calculate PMT 
@@ -624,7 +624,11 @@ def lambda_handler(event, context):
                 control.retire_spending = False
                 portfolio.FV = int(event.message.text) * 12 / portfolio.withdrawal_rate
                 if portfolio.PV>0 :
+                    # 若pv>0，則可以把剩餘存款投入投資組合
                     portfolio.PV *= -1
+                else:
+                    # 存款不夠付緊急預備金，無法有餘力投入
+                    portfolio.PV = 0
 
                 k = portfolio.portfolio_return_rate
                 n = portfolio.n
@@ -635,9 +639,9 @@ def lambda_handler(event, context):
                     portfolio.PMT *= -1
 
                 reply_word = "大功告成!!\n"
-                if portfolio.PV >= 0:
+                if portfolio.PV != 0:
                     reply_word += "建議您將存款中的 $"+str(portfolio.emergency_fund)+"元存入定存做為緊急預備金\n\n"
-                    reply_word += "其餘存款 $"+str(portfolio.PV)+"您可以投入以下投資組合:\n"
+                    reply_word += "其餘存款 $"+str(portfolio.PV * -1)+"您可以投入以下投資組合:\n"
                 else:
                     reply_word += "建議您先努力存到$"+str(portfolio.emergency_fund)+"元做為緊急預備金，若您有信貸、卡債等高利息債務，也建議您先盡快清償\n\n"
                     reply_word += "之後再將收入定期定額投入以下投資組合:\n"
