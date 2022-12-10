@@ -291,7 +291,7 @@ def lambda_handler(event, context):
             reply_word += "\U0001F449富邦證劵複委託\nhttps://reurl.cc/DXblNQ\n\n"
             reply_word += "\U0001F449投資小白必看!花花推薦的投資入門指南: 漫步華爾街的10條投資金律\nhttps://reurl.cc/gQnjW7\n\n"
             reply_word += "\U0001F449如何估算股票的長期報酬率? 讓高登公式來幫你\nhttps://reurl.cc/jRmYbD\n\n"
-            reply_word += "\U0001F449想知道花花\U0001F638的秘密嗎? 歡迎來本專案的github賞星星\U00002B50\nhttps://reurl.cc/91b8LV\n\n"
+            reply_word += "\U00002B50想知道花花\U0001F638的秘密嗎? 歡迎來本專案的github賞星星\U00002B50\nhttps://reurl.cc/91b8LV\n\n"
             reply = TextSendMessage(reply_word)
 
         elif (control.age == True ):
@@ -658,7 +658,7 @@ def lambda_handler(event, context):
                 reply_word += f"(ex: 若今年的通膨率為2%，則明年應投入{portfolio.PMT*1.02:.1f}元至投資組合)\n\n"
 
                 reply_word += "做完規劃後不知道如何開始執行嗎?\n"
-                reply_word += "別擔心，花花幫你準備新手大禮包，可以解決您的疑問，快點擊功能表的\"實踐規劃\"領取大禮包\n\n!"
+                reply_word += "別擔心，花花幫你準備新手大禮包，可以解決您的疑問，快點擊功能表的\"實踐規劃\"領取大禮包!\n\n"
 
                 reply_word += "<<免責聲明>>\n"
                 reply_word += "本軟體僅做為學術研究使用，不可用於實際投資建議，更不得作為任何交易之依據。投資一定有風險，過往業績並不代表將來表現，投資人應運用個人獨立思考能力，或諮詢其財務、稅務、投資等顧問，自行作出投資決定，本軟體在任何情況下均不會就任何直接、間接或其他損失承擔任何責任。"
