@@ -154,7 +154,6 @@ def lambda_handler(event, context):
 
         if event.message.text == "start":
             # introduction
-
             reply_word = "Hi 我是花花，接下來我將利用資產配置理論及被動投資法，帶您邁開投資的第1步，以退休為目標，規劃長期投資組合，跟隨全球市場一起長期成長。\n"
             reply = TemplateSendMessage(
                 alt_text="進入新手村",
@@ -170,11 +169,12 @@ def lambda_handler(event, context):
             )
         
         elif event.message.text == "進入新手村":
+            # 新手村1: 介紹被動投資
             reply = TemplateSendMessage(
                 alt_text="被動投資是什麼",
                 template=ButtonsTemplate(
                     title="蛤，被動投資是啥?",
-                    text="被動投資就是買進並長期持有市場上所有投資標的，以賺取整體市場長期經濟成長",
+                    text="被動投資就是買進並長期持有市場上所有投資標的，以賺取整體市場長期經濟成長，並降低個股風險",
                     actions=[
                         URIAction(
                             label="點我看更多被動投資的介紹",
@@ -188,14 +188,53 @@ def lambda_handler(event, context):
                 )
             )
 
-        elif event.message.text == "如何買進市場上所有投資標的"
+        elif event.message.text == "如何買進市場上所有投資標的":
+            # 新手村2: 介紹ETF
+            reply = TemplateSendMessage(
+                alt_text="ETF是什麼",
+                template=ButtonsTemplate(
+                    title="利用市場型ETF就能辦到!",
+                    text="持有ETF，就能輕鬆分散投資在一籃子的成分股!",
+                    actions=[
+                        URIAction(
+                            label="點我看更多ETF的介紹",
+                            uri="https://rich01.com/etf0050/"
+                        ),
+                        MessageAction(
+                            label="那資產配置又是什麼",
+                            text="那資產配置又是什麼"
+                        )
+                    ]
+                )
+            )
 
+        elif event.message.text == "那資產配置又是什麼":
+            # 新手村3: 介紹資產配置
+            reply = TemplateSendMessage(
+                alt_text="資產配置是什麼",
+                template=ButtonsTemplate(
+                    text="資產配置就是透過持有不同的資產，來降低投資組合的波動!如果只持有股票，在經濟衰退時，可能有高達40%的跌幅，使投資人忍不住在最差的時候賣出股票;若持有股票+債劵，因為兩者非完全正相關，故能降低投組的波動，避免投資人的不理性行為",
+                    actions=[
+                        URIAction(
+                            label="點我看更多資產配置的介紹",
+                            uri="https://rich01.com/how-asset-allocation-1/"
+                        ),
+                        MessageAction(
+                            label="離開新手村",
+                            text="restart"
+                        )
+                    ]
+                )
+            )
 
+        elif event.message.text =="restart":
             # initialize and ask age
             portfolio.__init__()
             control.__init__()
 
-            reply_word = "Go Go Go \n\n請輸入您的年齡"
+            reply_word = "經過了新手村的訓練，相信你已經有能力踏上資產配置的旅程，接下來我將帶領你規劃自己的長期投資組合。\n\n"
+            reply_word += "途中如果有任何問題，請點擊功能表左下角的\"名詞解釋\"，花花會幫你解答\n\n"
+            reply_word += "首先，請輸入您的年齡"
             reply = TextSendMessage(reply_word)
             control.age = True 
 
@@ -252,6 +291,7 @@ def lambda_handler(event, context):
             reply_word += "富邦證劵複委託\nhttps://reurl.cc/DXblNQ\n\n"
             reply_word += "投資小白必看!花花推薦的投資入門指南: 漫步華爾街的10條投資金律\nhttps://reurl.cc/gQnjW7\n\n"
             reply_word += "如何估算股票的長期報酬率? 讓高登公式來幫你\nhttps://reurl.cc/jRmYbD\n\n"
+            reply_word += "想知道花花的秘密嗎? 歡迎來本專案的github賞星星\nhttps://reurl.cc/91b8LV\n\n"
             reply = TextSendMessage(reply_word)
 
         elif (control.age == True ):
