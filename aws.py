@@ -317,7 +317,7 @@ def lambda_handler(event, context):
                 )
                 control.experience = True
             else:
-                reply = TextSendMessage(text = "請輸入數字")
+                reply = TextSendMessage(text = "您輸入的內容不是數字，請輸入年齡")
 
         elif (control.experience == True):
             # receive experience and ask volatility
@@ -474,7 +474,7 @@ def lambda_handler(event, context):
 
                 control.basic_spending = True
                 reply_word = "恭喜您已經挑選完示範投資組合，接下來將為您計算每月需投入多少資金到此投資組合，才有可能達成退休目標\n\n"
-                reply_word += "請輸入您目前每個月的最低生活費(含:房租、水電瓦斯費、交通費、基本伙食費、電信費等, 單位: 元)"
+                reply_word += "請輸入您目前每個月的最低生活費(含:房租、水電瓦斯費、交通費、基本伙食費、電信費、醫療費等, 單位: 元)"
                 reply = TextSendMessage(reply_word)
 
 
@@ -594,7 +594,7 @@ def lambda_handler(event, context):
                 control.saving = True
                 reply = TextSendMessage(text = "請輸入您目前的存款總額(單位: 元)")
             else:
-                reply = TextSendMessage(text = "請輸入正整數")
+                reply = TextSendMessage(text = "您輸入的內容不是正整數，請輸入每月最低生活費")
 
         elif control.saving == True:
             #receiving saving, calculate PV, calculate PV
@@ -668,7 +668,7 @@ def lambda_handler(event, context):
                 reply = TextSendMessage(text=reply_word)
 
             else:
-                reply = TextSendMessage(text = "請輸入正整數")
+                reply = TextSendMessage(text = "您輸入的內容非正整數，請輸入退休後預期每月實質開支")
 
         else:
             reply = TextSendMessage(text= event.message.text)
