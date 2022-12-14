@@ -234,7 +234,8 @@ def lambda_handler(event, context):
 
             reply_word = "經過了新手村的訓練，相信你已經有能力踏上資產配置的旅程，接下來我將帶領你規劃自己的長期投資組合。\n\n"
             reply_word += "途中如果有任何問題，請點擊功能表左下角的\"名詞解釋\"，花花會幫你解答\n\n"
-            reply_word += "首先，請輸入您的年齡"
+            reply_word += "首先，請輸入您的年齡\n"
+            reply_word += "(Ｔips:點擊畫面左下角的圖案即可開啟鍵盤)"
             reply = TextSendMessage(reply_word)
             control.age = True 
 
@@ -637,27 +638,27 @@ def lambda_handler(event, context):
                 portfolio.PMT = k/(1-(1+k)**(-n)) * (-PV - FV/((1+k)**n))
                 portfolio.PMT *= -1
 
-                reply_word = "大功告成!!\n"
+                reply_word = "\U0001F389大功告成!!\U0001F389\n\n"
                 if portfolio.PV != 0:
-                    reply_word += "建議您將存款中的 $"+str(portfolio.emergency_fund)+"元存入定存做為緊急預備金\n\n"
-                    reply_word += "其餘存款 $"+str(portfolio.PV * -1)+"您可以投入以下投資組合:\n"
+                    reply_word += "\U0001F4B5建議您將存款中的 $"+str(portfolio.emergency_fund)+"元存入定存做為緊急預備金\n\n"
+                    reply_word += "\U0001F4E3其餘存款 $"+str(portfolio.PV * -1)+"您可以投入以下投資組合:\n"
                 else:
-                    reply_word += "建議您先努力存到$"+str(portfolio.emergency_fund)+"元做為緊急預備金，若您有信貸、卡債等高利息債務，也建議您先盡快清償\n\n"
-                    reply_word += "之後再將收入定期定額投入以下投資組合:\n"
+                    reply_word += "\U0001F4B5建議您先努力存到$"+str(portfolio.emergency_fund)+"元做為緊急預備金，若您有信貸、卡債等高利息債務，也建議您先盡快清償\n\n"
+                    reply_word += "\U0001F4E3之後再將收入定期定額投入以下投資組合:\n"
 
-                reply_word += " 台灣市場型ETF:\n"
+                reply_word += " \U0001F3F7台灣市場型ETF:\n"
                 for i in portfolio.tw_asset:
                     reply_word += f"  {i.name} 占比: {i.weight:.2%}\n "
-                reply_word += "\n 全球市場型ETF:\n"
+                reply_word += "\n \U0001F3F7全球市場型ETF:\n"
                 for i in portfolio.global_asset:
                     reply_word += f"  {i.name} 占比: {i.weight:.2%}\n "
-                reply_word += "\n 債劵ETF:\n"
+                reply_word += "\n \U0001F3F7債劵ETF:\n"
                 for i in portfolio.bond_asset:
                     reply_word += f"  {i.name} 占比: {i.weight:.2%}\n "
-                reply_word += f"\n另外，建議您在接下來的{portfolio.n}年，每年皆定期定額投入\"實質\"{portfolio.PMT:.1f}元到上述投資組合，以期達成退休目標\n"
+                reply_word += f"\n\U0001F514另外，建議您在接下來的{portfolio.n}年，每年皆定期定額投入\"實質\"{portfolio.PMT:.1f}元到上述投資組合，以期達成退休目標\n"
                 reply_word += f"(ex: 若今年的通膨率為2%，則明年應投入{portfolio.PMT*1.02:.1f}元至投資組合)\n\n"
 
-                reply_word += "做完規劃後不知道如何開始執行嗎?\n"
+                reply_word += "\U0001F6CE做完規劃後不知道如何開始執行嗎?\n"
                 reply_word += "別擔心，花花幫你準備新手大禮包，可以解決您的疑問，快點擊功能表的\"實踐規劃\"領取大禮包!\n\n"
 
                 reply_word += "<<免責聲明>>\n"
